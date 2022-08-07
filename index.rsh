@@ -13,7 +13,8 @@ export const main = Reach.App(() => {
     const Alice = Participant('Alice', {
         ...hasRandom,
         NFTID: Fun([], Token),
-        Numberoftickets: Fun([], UInt),
+        Numofaccountconnects: Fun([], UInt),
+        Maxnumtickets: Fun([], UInt),
         showhash: Fun([Digest], Null),
         Aliceticketnum: Fun([], UInt),
         get_Address: Fun([UInt], Address),
@@ -26,13 +27,14 @@ export const main = Reach.App(() => {
 
     Alice.only(() => {
         const NftId = declassify(interact.NFTID())
-        const numoftickets = declassify(interact.Numberoftickets())
+        const numofaccountconnects = declassify(interact.Numofaccountconnects())
+        const numoftickets = declassify(interact.Maxnumtickets())
         const _Aliceticknum = interact.Aliceticketnum()
         const [_commitAlice, _saltAlice] = makeCommitment(interact, _Aliceticknum)
         const commitAlice = declassify(_commitAlice)
 
     })
-    Alice.publish(NftId, numoftickets, commitAlice)
+    Alice.publish(NftId, numofaccountconnects, commitAlice)
     commit()
     Alice.only(() => {
         const seehashvalue = declassify(interact.showhash(commitAlice))
@@ -42,7 +44,7 @@ export const main = Reach.App(() => {
     const [i] =
         parallelReduce([0])
             .invariant(balance(NftId) == 0)
-            .while(i < numoftickets)
+            .while(i < numofaccountconnects)
             .api(
                 Bob.raffle_tickets,
                 (ticks, k) => {
@@ -60,7 +62,7 @@ export const main = Reach.App(() => {
     checkCommitment(commitAlice, saltAlice, Aliceticknum)
     var [j] = [0]
     invariant(balance(NftId) == 0)
-    while (j < numoftickets) {
+    while (j < numofaccountconnects) {
         commit()
         Alice.only(() => {
             const getadd = declassify(interact.get_Address(j))
