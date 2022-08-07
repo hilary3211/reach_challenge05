@@ -17,12 +17,13 @@ const showuserBalance = async (acc, name) => {
     console.log(`${name} has ${stdlib.formatCurrency(amt)} ${stdlib.standardUnit} and ${amtNFT} of the NFT`);
 };
 
-const Bob_accs = async (who, num) => {
+const Bob_accs = async (who) => {
     try {
         const ctc = who.contract(backend, ctcAlice.getInfo());
         const address = who.getAddress()
         address_list.push(address)
         who.tokenAccept(myNFT.id)
+        const num = Math.floor(Math.random() * 20)
         await ctc.apis.Bob.raffle_tickets(parseInt(num));
 
     } catch (error) {
@@ -48,8 +49,11 @@ await Promise.all([
             return myNFT.id
         },
 
-        Numberoftickets: async () => {
+        Numofaccountconnects: async () => {
             return parseInt(8)
+        },
+        Maxnumtickets: async () => {
+            return parseInt(20)
         },
         showhash: async (hash) => {
             console.log(` The hashed value: ${hash}`)
@@ -64,14 +68,14 @@ await Promise.all([
             return [parseInt(stdlib.bigNumberToNumber(t[1]))]
         },
     }),
-    await Bob_accs(Bob1, 14),
-    await Bob_accs(Bob2, 5),
-    await Bob_accs(Bob3, 18),
-    await Bob_accs(Bob4, 21),
-    await Bob_accs(Bob5, 25),
-    await Bob_accs(Bob6, 13),
-    await Bob_accs(Bob7, 12),
-    await Bob_accs(Bob8, 47),
+    await Bob_accs(Bob1),
+    await Bob_accs(Bob2),
+    await Bob_accs(Bob3),
+    await Bob_accs(Bob4),
+    await Bob_accs(Bob5),
+    await Bob_accs(Bob6),
+    await Bob_accs(Bob7),
+    await Bob_accs(Bob8),
 
 
 ]);
